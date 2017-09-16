@@ -10,16 +10,19 @@ public class Player : MonoBehaviour {
 	private Vector3 Movement;
 
 	// Use this for initialization
-	void Start () {
-		
+	void Start ()
+	{
+		MyBody = GetComponent<Rigidbody>();
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void Update ()
+	{
 		
 	}
 
-	void FixedUpdate() {
+	void FixedUpdate()
+	{
 
 		float Right = Input.GetAxisRaw("Horizontal");
 		float Forward = Input.GetAxisRaw("Vertical");
