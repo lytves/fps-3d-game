@@ -19,6 +19,7 @@ public class Enemy : MonoBehaviour {
 		
 	}
 
+	//the method for damage a enemy
 	public void takeDamage(int Damage)
 	{
 		health--;

@@ -20,6 +20,7 @@ public class Bullet : MonoBehaviour {
 		
 	}
 
+	//the method for collisione with enemy
 	void OnTriggerEnter(Collider other)
 	{
 		if(other.gameObject.tag == "Enemy")
