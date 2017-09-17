@@ -21,6 +21,7 @@ public class Player : MonoBehaviour {
 		
 	}
 
+	//method for move the player
 	void FixedUpdate()
 	{
 
@@ -28,5 +29,8 @@ public class Player : MonoBehaviour {
 		float Forward = Input.GetAxisRaw("Vertical");
 
 		Movement.Set(Forward, 0f, Right);
+
+		MyBody.AddForce(transform.forward * Forward * speed, ForceMode.Impulse);
+		MyBody.AddForce(transform.right * Right * speed, ForceMode.Impulse);
 	}
 }
