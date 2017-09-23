@@ -12,12 +12,14 @@ public class Bullet : MonoBehaviour {
 	void Start ()
 	{
 		GetComponent<Rigidbody>().AddForce(transform.forward * force, ForceMode.Impulse);
+
+		//for destroy bullets after 2 seconds
+		Destroy(gameObject, 2);
 	}
 	
 	// Update is called once per frame
 	void Update ()
 	{
-		
 	}
 
 	//the method for collisione with enemy
