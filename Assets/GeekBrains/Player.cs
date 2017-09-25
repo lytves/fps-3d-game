@@ -10,6 +10,13 @@ public class Player : MonoBehaviour {
 	private Vector3 movement;
 	public GameObject bullet, startBullet;
 
+    public int health;
+
+    public const int magazine = 30;
+    public int ammo = 90, currentMagazine = 30;
+
+    public bool canAttack = true, reload = false;
+
 	// Use this for initialization
 	void Start ()
 	{
@@ -19,15 +26,22 @@ public class Player : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
 	{
-		if (Input.GetMouseButtonDown(0))
+        //GetMouseButtonDown for fire slow
+        //GetMouseButton for fire fast
+        if (Input.GetMouseButton(0))
 		{
-			Fire();
+			StartCoroutine( Fire());
 		}
-	}
 
-	//method for move the player
+        //call for reload the magazine
+        if (Input.GetKeyDown(KeyCode.R))
+            StartCoroutine(StartReload());
+    }
+
+	//method for move the player, better the only Update, because refresh more
 	void FixedUpdate()
 	{
+        //here is a movement the player
 		float right = Input.GetAxisRaw("Horizontal");
 		float forward = Input.GetAxisRaw("Vertical");
 
@@ -38,9 +52,59 @@ public class Player : MonoBehaviour {
 	}
 
 	//method for fire
-	void Fire()
+	IEnumerator Fire()
 	{
-		//clone the object "bullet" 
-		Instantiate(bullet, startBullet.transform.position, startBullet.transform.rotation);
-	}
+        //if is posible to fire
+        if (canAttack && currentMagazine > 0 && !reload)
+        {
+            canAttack = false;
+            currentMagazine--;
+
+		    //clone the object "bullet" 
+		    Instantiate(bullet, startBullet.transform.position, startBullet.transform.rotation);
+
+            if (currentMagazine <= 0)
+            {
+                StartCoroutine(StartReload());
+                reload = true;
+            }
+
+            yield return new WaitForSeconds(0.05f);
+
+            canAttack = true;
+        }
+    }
+
+    //the method for reload the magazine
+    IEnumerator StartReload()
+    {
+        yield return new WaitForSeconds(1f);
+
+        if (ammo > magazine)
+        {
+            int num = magazine - currentMagazine;
+            ammo -= num;
+            currentMagazine = magazine;
+        }
+        else
+        {
+            currentMagazine = ammo;
+            ammo = 0;
+        }
+
+        reload = false;
+
+    }
+
+    public void TakeDamage(int damage)
+    {
+        health -= damage;
+
+        if (health <= 0)
+        {
+            //!!!!!!! death of the player
+           // myBody.constraints = RigidbodyConstraints.None;
+            //GetComponent<MeshRenderer>().material.color = Color.red;
+        }
+    }
 } 
