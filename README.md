@@ -6,6 +6,6 @@
 
 
 ### TODO:
-* do move the enemy with Impulse (equal the movement of the player)
+* do movenemnt of the enemy with Impulse (equal the movement of the player)
 * enemy start attack to player
 * death of the player
