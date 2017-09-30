@@ -21,6 +21,7 @@ public class Player : MonoBehaviour {
 	void Start ()
 	{
 		myBody = GetComponent<Rigidbody>();
+        Cursor.lockState = CursorLockMode.Locked;
 	}
 	
 	// Update is called once per frame
@@ -60,8 +61,8 @@ public class Player : MonoBehaviour {
             canAttack = false;
             currentMagazine--;
 
-		    //clone the object "bullet" 
-		    Instantiate(bullet, startBullet.transform.position, startBullet.transform.rotation);
+            //clone the object "bullet" 
+            Instantiate(bullet, startBullet.transform.position, startBullet.transform.rotation);
 
             if (currentMagazine <= 0)
             {
