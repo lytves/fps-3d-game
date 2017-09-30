@@ -25,6 +25,11 @@ public class Player : MonoBehaviour {
     float groundDistance;
     Collider myCollider;
 
+    public GameObject weapon, camera;
+    public float rotationSpeedWeapon;
+    Ray myRay;
+    RaycastHit myRaycastHit;
+
 	// Use this for initialization
 	void Start ()
 	{
@@ -54,6 +59,24 @@ public class Player : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.R))
             StartCoroutine(StartReload());
 
+        //for rotate the arm to center of the display
+        myRay = new Ray(camera.transform.position, camera.transform.forward);
+        Physics.Raycast(myRay, out myRaycastHit);
+
+        Vector3 rotation;
+
+        if (myRaycastHit.collider == null)
+        {
+            rotation = weapon.transform.forward;
+        } else
+        {
+            rotation = myRaycastHit.point - weapon.transform.position;
+        }
+
+        weapon.transform.rotation = Quaternion.Slerp(weapon.transform.rotation, Quaternion.LookRotation(rotation), rotationSpeedWeapon * Time.deltaTime);
+
+        //for show myRaycastHit
+        //Debug.DrawRay(camera.transform.position, rotation, Color.green);
     }
 
 	//method for move the player, better the only Update, because refresh more
