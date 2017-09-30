@@ -29,7 +29,7 @@ public class Enemy : MonoBehaviour {
 	// Update is called once per frame
 	void FixedUpdate ()
 	{
-        //if distance beetween enemy and player is a little, to turn the enemy to the player
+        //if distance beetween enemy and player is a little, move the enemy to the player
 		if (Vector3.Distance(myTransform.position, target.position) < maxDistance)
 		{
 			Vector3 myRotation = target.position - myTransform.position;
@@ -54,7 +54,14 @@ public class Enemy : MonoBehaviour {
                     StartCoroutine(Attack());
                 }
             }
+            //here is a movement the player
+            //float right = Input.GetAxisRaw("Horizontal");
+            //float forward = Input.GetAxisRaw("Vertical");
 
+            //movement.Set(forward, 0f, right);
+
+            //myBody.AddForce(transform.forward * forward * speed, ForceMode.Impulse);
+            //myBody.AddForce(transform.right * right * speed, ForceMode.Impulse);
         }
 	}
 
