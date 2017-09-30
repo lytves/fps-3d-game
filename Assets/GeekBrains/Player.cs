@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+
 [RequireComponent(typeof(Rigidbody))]
 
 public class Player : MonoBehaviour {
@@ -17,12 +19,26 @@ public class Player : MonoBehaviour {
 
     public bool canAttack = true, reload = false;
 
+    public Text displayHealth, displayMagazine, displayAmmo;
+
+    public float jumpForce;
+    float groundDistance;
+    Collider myCollider;
+
 	// Use this for initialization
 	void Start ()
 	{
 		myBody = GetComponent<Rigidbody>();
         Cursor.lockState = CursorLockMode.Locked;
-	}
+
+        //for create at start UI
+        displayHealth.text = "Health: " + health;
+        displayMagazine.text = "Magazine: " + currentMagazine;
+        displayAmmo.text = "Ammo: " + ammo;
+
+        myCollider = GetComponent<Collider>();
+        groundDistance = myCollider.bounds.extents.y;
+    }
 	
 	// Update is called once per frame
 	void Update ()
@@ -37,6 +53,7 @@ public class Player : MonoBehaviour {
         //call for reload the magazine
         if (Input.GetKeyDown(KeyCode.R))
             StartCoroutine(StartReload());
+
     }
 
 	//method for move the player, better the only Update, because refresh more
@@ -50,7 +67,11 @@ public class Player : MonoBehaviour {
 
 		myBody.AddForce(transform.forward * forward * speed, ForceMode.Impulse);
 		myBody.AddForce(transform.right * right * speed, ForceMode.Impulse);
-	}
+
+        //for jump player
+        if (Input.GetKeyDown(KeyCode.Space) && IsGrounded())
+            myBody.AddForce(Vector3.up * jumpForce * 20, ForceMode.Impulse);
+    }
 
 	//method for fire
 	IEnumerator Fire()
@@ -60,6 +81,8 @@ public class Player : MonoBehaviour {
         {
             canAttack = false;
             currentMagazine--;
+
+            displayMagazine.text = "Magazine: " + currentMagazine;
 
             //clone the object "bullet" 
             Instantiate(bullet, startBullet.transform.position, startBullet.transform.rotation);
@@ -93,6 +116,8 @@ public class Player : MonoBehaviour {
             ammo = 0;
         }
 
+        displayAmmo.text = "Ammo: " + ammo;
+
         reload = false;
 
     }
@@ -101,6 +126,8 @@ public class Player : MonoBehaviour {
     {
         health -= damage;
 
+        displayHealth.text = "Health: " + health;
+
         if (health <= 0)
         {
             //!!!!!!! death of the player
@@ -108,5 +135,11 @@ public class Player : MonoBehaviour {
             //GetComponent<MeshRenderer>().material.color = Color.red;
             Debug.Log("Player is dead!");
         }
+    }
+
+    //for single jump player
+    public bool IsGrounded()
+    {
+        return Physics.Raycast(transform.position, -Vector3.up, groundDistance + 0.1f);
     }
 } 

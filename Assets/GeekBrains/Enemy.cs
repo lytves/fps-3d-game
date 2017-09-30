@@ -96,4 +96,5 @@ public class Enemy : MonoBehaviour {
 			GetComponent<MeshRenderer>().material.color = Color.red;
 		}
 	}
+
 }
