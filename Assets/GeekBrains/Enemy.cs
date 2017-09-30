@@ -43,6 +43,9 @@ public class Enemy : MonoBehaviour {
             if (Vector3.Distance(myTransform.position, target.position) > minDistance)
             {
                 myTransform.position += myTransform.forward * mySpeed * Time.deltaTime;
+                
+                //test of new movement (enemy not stop at minDistance)
+                //myBody.AddForce(myTransform.forward * mySpeed, ForceMode.Impulse);
             }
 
             //for
@@ -77,7 +80,7 @@ public class Enemy : MonoBehaviour {
         {
             target.GetComponent<Player>().TakeDamage(damage);
         }
-        //......
+        //TODO???
 
         couldown = false;
     }

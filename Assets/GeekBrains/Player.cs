@@ -103,8 +103,9 @@ public class Player : MonoBehaviour {
         if (health <= 0)
         {
             //!!!!!!! death of the player
-           // myBody.constraints = RigidbodyConstraints.None;
+            // myBody.constraints = RigidbodyConstraints.None;
             //GetComponent<MeshRenderer>().material.color = Color.red;
+            Debug.Log("Player is dead!");
         }
     }
 } 
