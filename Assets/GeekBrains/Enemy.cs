@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour {
 
@@ -17,55 +18,52 @@ public class Enemy : MonoBehaviour {
     public bool couldown = false;
     public int damage;
 
+    public NavMeshAgent myAgent;
+
     // Use this for initialization
     void Start ()
 	{
 		myBody = GetComponent<Rigidbody>();
 		myTransform = transform;
 
-		target = GameObject.FindGameObjectWithTag("Player").transform;
+		//target = GameObject.FindGameObjectWithTag("Player").transform;
 	}
 	
 	// Update is called once per frame
 	void FixedUpdate ()
 	{
+
+        myAgent.SetDestination(target.transform.position);
+
         //if distance beetween enemy and player is a little, move the enemy to the player
-		if (Vector3.Distance(myTransform.position, target.position) < maxDistance)
-		{
-			Vector3 myRotation = target.position - myTransform.position;
+		//if (Vector3.Distance(myTransform.position, target.position) < maxDistance)
+		//{
+		//	Vector3 myRotation = target.position - myTransform.position;
 
 
-            //TODO do move the enemy with Impulse (how moved the player)
+  //          //TODO do move the enemy with Impulse (how moved the player)
 
-            myTransform.rotation = Quaternion.Slerp(myTransform.rotation, Quaternion.LookRotation(myRotation), speedRotation * Time.deltaTime);
+  //          myTransform.rotation = Quaternion.Slerp(myTransform.rotation, Quaternion.LookRotation(myRotation), speedRotation * Time.deltaTime);
 
-            //for enemy go to player
-            if (Vector3.Distance(myTransform.position, target.position) > minDistance)
-            {
-                myTransform.position += myTransform.forward * mySpeed * Time.deltaTime;
+  //          //for enemy go to player
+  //          if (Vector3.Distance(myTransform.position, target.position) > minDistance)
+  //          {
+  //              myTransform.position += myTransform.forward * mySpeed * Time.deltaTime;
                 
-                //test of new movement (enemy not stop at minDistance)
-                //myBody.AddForce(myTransform.forward * mySpeed, ForceMode.Impulse);
-            }
+  //              //test of new movement (enemy not stop at minDistance)
+  //              //myBody.AddForce(myTransform.forward * mySpeed, ForceMode.Impulse);
+  //          }
 
-            //for
-            if (Vector3.Distance(myTransform.position, target.position) < attackDistance)
-            {
-                if (!couldown)
-                {
-                    couldown = true;
-                    StartCoroutine(Attack());
-                }
-            }
-            //here is a movement the player
-            //float right = Input.GetAxisRaw("Horizontal");
-            //float forward = Input.GetAxisRaw("Vertical");
-
-            //movement.Set(forward, 0f, right);
-
-            //myBody.AddForce(transform.forward * forward * speed, ForceMode.Impulse);
-            //myBody.AddForce(transform.right * right * speed, ForceMode.Impulse);
-        }
+  //          //for call method of attack the player
+  //          if (Vector3.Distance(myTransform.position, target.position) < attackDistance)
+  //          {
+  //              if (!couldown)
+  //              {
+  //                  couldown = true;
+  //                  StartCoroutine(Attack());
+  //              }
+  //          }
+  //      }
 	}
 
     IEnumerator Attack()
