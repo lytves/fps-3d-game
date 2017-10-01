@@ -8,8 +8,10 @@ public class Bullet : MonoBehaviour {
 	public float force;
 	public int damage;
 
-	// Use this for initialization
-	void Start ()
+    public GameObject myShooter;
+
+    // Use this for initialization
+    void Start ()
 	{
 		GetComponent<Rigidbody>().AddForce(transform.forward * force, ForceMode.Impulse);
 
@@ -27,7 +29,7 @@ public class Bullet : MonoBehaviour {
 	{
 		if (other.gameObject.tag == "Enemy")
 		{
-			other.GetComponent<Enemy>().TakeDamage(damage);
+			other.GetComponent<Enemy>().TakeDamage(damage, myShooter);
 			Destroy(gameObject);
 		}
 	}

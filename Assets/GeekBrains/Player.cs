@@ -5,12 +5,13 @@ using UnityEngine.UI;
 
 [RequireComponent(typeof(Rigidbody))]
 
-public class Player : MonoBehaviour {
+public class Player : MonoBehaviour
+{
 
-	public Rigidbody myBody;
-	public float speed;
-	private Vector3 movement;
-	public GameObject bullet, startBullet;
+    public Rigidbody myBody;
+    public float speed;
+    private Vector3 movement;
+    public GameObject bullet, startBullet;
 
     public int health;
 
@@ -30,10 +31,10 @@ public class Player : MonoBehaviour {
     Ray myRay;
     RaycastHit myRaycastHit;
 
-	// Use this for initialization
-	void Start ()
-	{
-		myBody = GetComponent<Rigidbody>();
+    // Use this for initialization
+    void Start()
+    {
+        myBody = GetComponent<Rigidbody>();
         Cursor.lockState = CursorLockMode.Locked;
 
         //for create at start UI
@@ -44,16 +45,16 @@ public class Player : MonoBehaviour {
         myCollider = GetComponent<Collider>();
         groundDistance = myCollider.bounds.extents.y;
     }
-	
-	// Update is called once per frame
-	void Update ()
-	{
+
+    // Update is called once per frame
+    void Update()
+    {
         //GetMouseButtonDown for fire slow
         //GetMouseButton for fire fast
         if (Input.GetMouseButton(0))
-		{
-			StartCoroutine( Fire());
-		}
+        {
+            StartCoroutine(Fire());
+        }
 
         //call for reload the magazine
         if (Input.GetKeyDown(KeyCode.R))
@@ -68,7 +69,8 @@ public class Player : MonoBehaviour {
         if (myRaycastHit.collider == null)
         {
             rotation = weapon.transform.forward;
-        } else
+        }
+        else
         {
             rotation = myRaycastHit.point - weapon.transform.position;
         }
@@ -79,26 +81,26 @@ public class Player : MonoBehaviour {
         //Debug.DrawRay(camera.transform.position, rotation, Color.green);
     }
 
-	//method for move the player, better the only Update, because refresh more
-	void FixedUpdate()
-	{
+    //method for move the player, better the only Update, because refresh more
+    void FixedUpdate()
+    {
         //here is a movement the player
-		float right = Input.GetAxisRaw("Horizontal");
-		float forward = Input.GetAxisRaw("Vertical");
+        float right = Input.GetAxisRaw("Horizontal");
+        float forward = Input.GetAxisRaw("Vertical");
 
-		movement.Set(forward, 0f, right);
+        movement.Set(forward, 0f, right);
 
-		myBody.AddForce(transform.forward * forward * speed, ForceMode.Impulse);
-		myBody.AddForce(transform.right * right * speed, ForceMode.Impulse);
+        myBody.AddForce(transform.forward * forward * speed, ForceMode.Impulse);
+        myBody.AddForce(transform.right * right * speed, ForceMode.Impulse);
 
         //for jump player
         if (Input.GetKeyDown(KeyCode.Space) && IsGrounded())
             myBody.AddForce(Vector3.up * jumpForce * 20, ForceMode.Impulse);
     }
 
-	//method for fire
-	IEnumerator Fire()
-	{
+    //method for fire
+    IEnumerator Fire()
+    {
         //if is posible to fire
         if (canAttack && currentMagazine > 0 && !reload)
         {
@@ -107,8 +109,17 @@ public class Player : MonoBehaviour {
 
             displayMagazine.text = "Magazine: " + currentMagazine;
 
+            //clone the object "bullet" - start
+            GameObject myBullet = Instantiate(bullet) as GameObject;
+            myBullet.transform.position = startBullet.transform.position;
+            myBullet.transform.rotation = startBullet.transform.rotation;
+            myBullet.GetComponent<Bullet>().myShooter = gameObject;
+
+
             //clone the object "bullet" 
-            Instantiate(bullet, startBullet.transform.position, startBullet.transform.rotation);
+            //Instantiate(bullet, startBullet.transform.position, startBullet.transform.rotation);
+
+            //clone the object "bullet" - end
 
             if (currentMagazine <= 0)
             {
@@ -140,6 +151,7 @@ public class Player : MonoBehaviour {
         }
 
         displayAmmo.text = "Ammo: " + ammo;
+        displayMagazine.text = "Magazine: " + currentMagazine;
 
         reload = false;
 
@@ -165,4 +177,4 @@ public class Player : MonoBehaviour {
     {
         return Physics.Raycast(transform.position, -Vector3.up, groundDistance + 0.1f);
     }
-} 
+}

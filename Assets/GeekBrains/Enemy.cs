@@ -20,6 +20,8 @@ public class Enemy : MonoBehaviour {
 
     public NavMeshAgent myAgent;
 
+    public bool agressive = false;
+
     // Use this for initialization
     void Start ()
 	{
@@ -84,7 +86,7 @@ public class Enemy : MonoBehaviour {
     }
 
 	//the method for damage the  enemy
-	public void TakeDamage(int damage)
+	public void TakeDamage(int damage, GameObject Agressor)
 	{
 		health -= damage;
 
@@ -93,6 +95,20 @@ public class Enemy : MonoBehaviour {
 			myBody.constraints = RigidbodyConstraints.None;
 			GetComponent<MeshRenderer>().material.color = Color.red;
 		}
-	}
+
+        BeAgressive(Agressor);
+
+    }
+
+    IEnumerator BeAgressive(GameObject agressor)
+    {
+        agressive = true;
+
+        target = agressor.transform;
+
+        yield return new WaitForSeconds(20);
+
+        agressive = false;
+    }
 
 }
