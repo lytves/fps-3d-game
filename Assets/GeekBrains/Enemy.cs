@@ -22,6 +22,8 @@ public class Enemy : MonoBehaviour {
 
     public bool agressive = false;
 
+    public bool isAlive = true;
+
     // Use this for initialization
     void Start ()
 	{
@@ -34,8 +36,8 @@ public class Enemy : MonoBehaviour {
 	// Update is called once per frame
 	void FixedUpdate ()
 	{
-
-        myAgent.SetDestination(target.transform.position);
+        if(isAlive)
+            myAgent.SetDestination(target.transform.position);
 
         //if distance beetween enemy and player is a little, move the enemy to the player
 		//if (Vector3.Distance(myTransform.position, target.position) < maxDistance)
@@ -85,21 +87,6 @@ public class Enemy : MonoBehaviour {
         couldown = false;
     }
 
-	//the method for damage the  enemy
-	public void TakeDamage(int damage, GameObject Agressor)
-	{
-		health -= damage;
-
-		if (health <= 0)
-		{
-			myBody.constraints = RigidbodyConstraints.None;
-			GetComponent<MeshRenderer>().material.color = Color.red;
-		}
-
-        BeAgressive(Agressor);
-
-    }
-
     IEnumerator BeAgressive(GameObject agressor)
     {
         agressive = true;
@@ -109,6 +96,33 @@ public class Enemy : MonoBehaviour {
         yield return new WaitForSeconds(20);
 
         agressive = false;
+    }
+
+    //the method for damage the  enemy
+    public void TakeDamage(int damage, GameObject Agressor)
+	{
+        if(isAlive)
+        {
+            health -= damage;
+
+            if (health <= 0)
+            {
+                Die();
+            }
+
+            StartCoroutine(BeAgressive(Agressor));
+        }
+    }
+
+    public void Die()
+    {
+        isAlive = false;
+        agressive = false;
+        target = null;
+        myAgent.SetDestination(transform.position);
+        myAgent.enabled = false;
+        myBody.constraints = RigidbodyConstraints.None;
+        GetComponent<MeshRenderer>().material.color = Color.red;
     }
 
 }
